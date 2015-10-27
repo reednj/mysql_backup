@@ -4,6 +4,7 @@ require 'rubygems'
 require 'ostruct'
 require 'fileutils'
 require 'json'
+require 'require_relative' if RUBY_VERSION =~ /1\.8/
 
 require_relative './shared/extensions'
 
