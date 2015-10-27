@@ -1,4 +1,5 @@
 
+require 'require_relative' if RUBY_VERSION =~ /1\.8/
 
 def try_load_file(path)
 	begin
