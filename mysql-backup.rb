@@ -7,9 +7,10 @@ require 'json'
 
 require_relative './shared/extensions'
 
-
 class BackupConfig
 	def initialize(config)
+		try_load ['app.config.rb', './config/app.config.rb', '../config/app.config.rb']
+
 		_validate! config
 		@config = config
 	end
@@ -82,18 +83,18 @@ class App
 		password = "-p#{@config.password}" if @config.password?
 		options = '--no-create-info --skip-comments'
 		tables = @config.tables.join ' '
-		`mysqldump -u #{@config.username} #{password} --host=#{@config.server} #{options} #{@config.database} #{tables} | gzip > #{tmp_path}`
+		run! "mysqldump -u #{@config.username} #{password} --host=#{@config.server} #{options} #{@config.database} #{tables} | gzip > #{tmp_path}; exit ${PIPESTATUS[0]}"
 	end
 
 	def save(to_dir)
 		if _remote_path? to_dir
 			dest = File.join(to_dir, filename)
-			`scp #{tmp_path} #{dest}`
+			run! "scp #{tmp_path} #{dest}"
 		else
 			p = File.expand_path to_dir
 			dest = File.join(p, filename)
 			FileUtils.copy tmp_path, dest
-		end	
+		end
 	end
 
 	def clean
@@ -106,6 +107,11 @@ class App
 
 	def tmp_path
 		"/tmp/mysql.#{@seed}.bak"
+	end
+
+	def run!(cmd)
+		output = `(#{cmd}) 2>&1`
+		raise "#{output}" if $?.exitstatus != 0
 	end
 
 	def _remote_path?(path)
