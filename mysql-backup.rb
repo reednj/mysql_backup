@@ -21,8 +21,7 @@ class BackupConfig
 
 	end
 
-	def self.load(path = nil)
-		return self.load('./mysql-backup.conf') if path.nil?
+	def self.load_from(path)
 		data = File.read path
 		obj = JSON.parse(data, {:symbolize_names => true})
 		return self.new obj
@@ -74,14 +73,24 @@ end
 
 class App
 	def main
-		@config = BackupConfig.load
+		
 		@seed = (rand() * 10000).round.to_s
 
+		begin
+			config_path = 'mysql-backup.conf'
+			config_path = ARGV[0] unless ARGV.empty?
+			@config = BackupConfig.load_from config_path
+		rescue => e
+			puts "Error: Could not load config file at '#{config_path}' - #{e.message}"
+			return
+		end
+		
 		self.create_backup
 
 		@config.save_to.each do |path|
 			begin
 				self.save path
+				puts File.join(path, filename)
 			rescue => e
 				puts "Could not save backup to #{path} - #{e.message}"
 			end
