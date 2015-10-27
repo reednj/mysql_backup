@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 def load_relative(path)
-	load File.expand_path(path, File.dirname(__FILE__))
+	file = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
+	load File.expand_path path, File.dirname(file)
 end
 
 require 'rubygems'
