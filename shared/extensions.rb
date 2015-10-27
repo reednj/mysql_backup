@@ -1,7 +1,7 @@
 
 def try_load_file(path)
 	begin
-		load path
+		load_relative path
 		return path
 	rescue LoadError => e
 		return nil

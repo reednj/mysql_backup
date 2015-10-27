@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 
+def load_relative(path)
+	load File.expand_path(path, File.dirname(__FILE__))
+end
+
 require 'rubygems'
 require 'ostruct'
 require 'fileutils'
 require 'json'
-require 'require_relative' if RUBY_VERSION =~ /1\.8/
 
-require_relative './shared/extensions'
+load_relative './shared/extensions.rb'
 
 class BackupConfig
 	def initialize(config)
