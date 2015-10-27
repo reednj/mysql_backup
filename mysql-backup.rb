@@ -5,6 +5,9 @@ require 'ostruct'
 require 'fileutils'
 require 'json'
 
+require_relative './shared/extensions'
+
+
 class BackupConfig
 	def initialize(config)
 		_validate! config
@@ -12,7 +15,7 @@ class BackupConfig
 	end
 
 	def self.load(path = nil)
-		return load('./mysql-backup.conf') if path.nil?
+		return self.load('./mysql-backup.conf') if path.nil?
 		data = File.read path
 		obj = JSON.parse(data, {:symbolize_names => true})
 		return self.new obj
@@ -47,11 +50,11 @@ class BackupConfig
 	end
 
 	def tables
-		Array.to @config[:tables]
+		Array.from @config[:tables]
 	end
 
 	def save_to
-		Array.to @config[:save_to]
+		Array.from @config[:save_to]
 	end
 
 end
@@ -108,14 +111,6 @@ class App
 	def _remote_path?(path)
 		# not exactly foolproof, but it will do for now
 		path.include? ':'
-	end
-end
-
-class Array
-	def self.to(a)
-		return a if a.is_a? Array
-		return [] if a.nil?
-		return [a]
 	end
 end
 
