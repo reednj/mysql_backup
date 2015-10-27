@@ -11,8 +11,9 @@ class BackupConfig
 	def initialize(config)
 		try_load ['app.config.rb', './config/app.config.rb', '../config/app.config.rb']
 
-		_validate! config
 		@config = config
+		_validate!
+
 	end
 
 	def self.load(path = nil)
@@ -22,12 +23,12 @@ class BackupConfig
 		return self.new obj
 	end
 
-	def _validate!(config)
-		raise 'config object required' if config.nil?
-		raise 'server required' if config[:server].nil?
-		raise 'username required' if config[:server].nil?
-		raise 'database required' if config[:database].nil?
-		raise 'backup destination required' if config[:save_to].nil?
+	def _validate!
+		raise 'config object required' if @config.nil?
+		raise 'server required' if server.nil?
+		raise 'username required' if username.nil?
+		raise 'database required' if database.nil?
+		raise 'backup destination required' if save_to.nil?
 	end
 
 	def server
@@ -35,11 +36,13 @@ class BackupConfig
 	end
 
 	def username
-		@config[:username]
+		@config[:username] || (app_config? ? AppConfig.db[:username] : nil)
 	end
 
 	def password
-		@config[:password]
+		pw = @config[:password] || (app_config? ? AppConfig.db[:password] : nil)
+		return nil if pw.nil? || pw.strip == ''
+		return pw
 	end
 
 	def database
@@ -47,7 +50,7 @@ class BackupConfig
 	end
 
 	def password?
-		!(@config[:password].nil? || @config[:password] == '')
+		!password.nil?
 	end
 
 	def tables
@@ -56,6 +59,10 @@ class BackupConfig
 
 	def save_to
 		Array.from @config[:save_to]
+	end
+
+	def app_config?
+		!!defined?(AppConfig) && !AppConfig.nil? && !AppConfig.db.nil? && AppConfig.db[:database] == self.database
 	end
 
 end
