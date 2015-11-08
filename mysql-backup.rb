@@ -10,6 +10,7 @@ require 'ostruct'
 require 'fileutils'
 require 'json'
 require 'yaml'
+require 'time'
 require 'trollop'
 
 load_relative './shared/extensions.rb'
@@ -79,9 +80,10 @@ class App
 		opts = Trollop::options do
 			version "mysql-backup #{v} (c) 2015 @reednj"
 			opt :config, "YAML config file", :type => :string
-			opt :output, "Name of backup output file", :type => :string
+			opt :filename, "Name of backup output file", :type => :string
 		end
 
+		Dir.mkdir tmp_dir if !Dir.exist? tmp_dir
 		@seed = (rand() * 10000).round.to_s
 
 		begin
@@ -92,6 +94,7 @@ class App
 			return
 		end
 		
+		@output_file = opts[:output] || "#{@config.database}.#{Date.today}.#{@seed}.sql"
 		self.create_backup
 
 		@config.save_to.each do |path|
@@ -130,11 +133,15 @@ class App
 	end
 
 	def filename
-		"#{@config.database}.#{@seed}.sql.gz"
+		"#{@output_file}.gz"
+	end
+
+	def tmp_dir
+		File.expand_path "~/.tmp/"
 	end
 
 	def tmp_path
-		"/tmp/mysql.#{@seed}.bak"
+		File.join tmp_dir, "mysql.#{@seed}.bak"
 	end
 
 	# runs a shell command in such a way that if it fails (according to the exit status)
