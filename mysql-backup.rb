@@ -79,7 +79,7 @@ end
 
 class App
 	def main
-		v = (`git describe --long` || 'v0.1.0').strip
+		v = (`git --git-dir=#{this_dir}/.git describe --long` || 'v0.1.0').strip
 
 		opts = Trollop::options do
 			version "mysql-backup #{v} (c) 2015 @reednj"
