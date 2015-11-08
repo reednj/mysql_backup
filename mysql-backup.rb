@@ -9,6 +9,7 @@ require 'rubygems'
 require 'ostruct'
 require 'fileutils'
 require 'json'
+require 'yaml'
 
 load_relative './shared/extensions.rb'
 
@@ -22,9 +23,8 @@ class BackupConfig
 	end
 
 	def self.load_from(path)
-		data = File.read path
-		obj = JSON.parse(data, {:symbolize_names => true})
-		return self.new obj
+		data = YAML.load_file(path)
+		BackupConfig.new data
 	end
 
 	def _validate!
@@ -36,11 +36,11 @@ class BackupConfig
 	end
 
 	def server
-		@config[:server]
+		@config['server']
 	end
 
 	def username
-		@config[:username] || (app_config? ? AppConfig.db[:username] : nil)
+		@config['username'] || (app_config? ? AppConfig.db[:username] : nil)
 	end
 
 	def password
@@ -50,7 +50,7 @@ class BackupConfig
 	end
 
 	def database
-		@config[:database]
+		@config['database']
 	end
 
 	def password?
@@ -58,11 +58,11 @@ class BackupConfig
 	end
 
 	def tables
-		Array.from @config[:tables]
+		Array.from @config['tables']
 	end
 
 	def save_to
-		Array.from @config[:save_to]
+		Array.from @config['save_to']
 	end
 
 	def app_config?
