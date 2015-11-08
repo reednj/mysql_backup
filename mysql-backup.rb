@@ -10,6 +10,7 @@ require 'ostruct'
 require 'fileutils'
 require 'json'
 require 'yaml'
+require 'trollop'
 
 load_relative './shared/extensions.rb'
 
@@ -73,12 +74,18 @@ end
 
 class App
 	def main
-		
+		v = 'v0.1.0'
+
+		opts = Trollop::options do
+			version "mysql-backup #{v} (c) 2015 @reednj"
+			opt :config, "YAML config file", :type => :string
+			opt :output, "Name of backup output file", :type => :string
+		end
+
 		@seed = (rand() * 10000).round.to_s
 
 		begin
-			config_path = 'mysql-backup.conf'
-			config_path = ARGV[0] unless ARGV.empty?
+			config_path = opts[:config] || 'mysql-backup.conf'
 			@config = BackupConfig.load_from config_path
 		rescue => e
 			puts "Error: Could not load config file at '#{config_path}' - #{e.message}"
@@ -130,11 +137,14 @@ class App
 		"/tmp/mysql.#{@seed}.bak"
 	end
 
+	# runs a shell command in such a way that if it fails (according to the exit status)
+	# and exception will be raised with the stderr output
 	def run!(cmd)
 		output = `(#{cmd}) 2>&1`
 		raise "#{output}" if $?.exitstatus != 0
 	end
 
+	# is this path on a remote server? do we need to use scp to copy the backup there?
 	def _remote_path?(path)
 		# not exactly foolproof, but it will do for now
 		path.include? ':'
