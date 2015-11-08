@@ -137,7 +137,7 @@ class App
 	end
 
 	def filename
-		"#{@output_file}.gz"
+		@output_file
 	end
 
 	def tmp_dir
