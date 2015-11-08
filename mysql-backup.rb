@@ -87,7 +87,7 @@ class App
 			opt :filename, "Name of backup output file", :type => :string
 		end
 
-		Dir.mkdir tmp_dir if !Dir.exist? tmp_dir
+		Dir.mkdir tmp_dir if !File.exist? tmp_dir
 		@seed = (rand() * 10000).round.to_s
 
 		begin
