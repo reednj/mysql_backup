@@ -98,7 +98,7 @@ class App
 			return
 		end
 		
-		@output_file = opts[:output] || "#{@config.database}.#{Date.today}.#{@seed}.sql"
+		@output_file = opts[:filename] || "#{@config.database}.#{Date.today}.#{@seed}.sql"
 		self.create_backup
 
 		@config.save_to.each do |path|
