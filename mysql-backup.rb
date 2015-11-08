@@ -1,8 +1,12 @@
 #!/usr/bin/env ruby
 
-def load_relative(path)
+def this_dir
 	file = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
-	load File.expand_path path, File.dirname(file)
+	File.expand_path File.dirname(file)
+end
+
+def load_relative(path)
+	load File.expand_path path, this_dir()
 end
 
 require 'rubygems'
@@ -75,7 +79,7 @@ end
 
 class App
 	def main
-		v = 'v0.1.0'
+		v = (`git describe --long` || 'v0.1.0').strip
 
 		opts = Trollop::options do
 			version "mysql-backup #{v} (c) 2015 @reednj"
