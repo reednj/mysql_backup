@@ -50,7 +50,7 @@ class BackupConfig
 	end
 
 	def password
-		pw = @config[:password] || (app_config? ? AppConfig.db[:password] : nil)
+		pw = @config['password'] || (app_config? ? AppConfig.db[:password] : nil)
 		return nil if pw.nil? || pw.strip == ''
 		return pw
 	end
