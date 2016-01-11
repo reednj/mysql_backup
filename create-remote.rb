@@ -2,10 +2,20 @@
 
 class App
 	def main
-		@server = SSHCmd.new 'reednj@fb.reednj.com'
-		@site_name = 'fb.reednj.com'
-		@code_path = '~/code'
+		if ARGV.length != 2
+			usage
+			return
+		end
+
+		@server = SSHCmd.new ARGV[1]
+		@site_name = ARGV[0]
 		@repo_name = "#{@site_name}.git"
+		@code_path = '~/code'
+		
+		if repo_exist?
+			puts "remote repository already exists (#{repo_path})"
+			return
+		end
 
 		puts 'creating remote repository'
 		self.create_repo
@@ -14,6 +24,20 @@ class App
 		self.copy_hook
 
 		puts 'done'
+	end
+
+	def usage
+		puts "A script for creating prod deployment remotes with git"
+		puts "Nathan Reed (c) 2015"
+		puts "Usage:"
+		puts "\tcreate-remote <repo-name> <remote-name>"
+		puts ""
+		puts "Example:"
+		puts "\tcreate-remote redditstream reednj@reddit-stream.com"
+	end
+
+	def repo_exist?
+		@server.exec("test -d #{repo_path} && echo 1").include? '1'
 	end
 
 	def repo_path
