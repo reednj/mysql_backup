@@ -33,7 +33,6 @@ class App
 	end
 
 	def copy_hook
-		# scp $SCRIPTS_DIR/hooks/post-receive.rb $REMOTE_HOST:$REMOTE_DIR/$REPOSITORY_NAME/.git/hooks/post-receive
 		@server.scp 'hooks/post-receive.rb', "#{repo_path}/.git/hooks/post-receive"
 	end
 
