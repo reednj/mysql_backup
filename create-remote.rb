@@ -1,4 +1,4 @@
-#!env ruby
+#!/usr/bin/env ruby
 
 class App
 	def main
@@ -57,7 +57,9 @@ class App
 	end
 
 	def copy_hook
-		@server.scp 'hooks/post-receive.rb', "#{repo_path}/.git/hooks/post-receive"
+		hook_path = "#{repo_path}/.git/hooks/post-receive"
+		@server.scp 'hooks/post-receive.rb', hook_path
+		@server.exec "chmod 775 #{hook_path}"
 	end
 
 end
