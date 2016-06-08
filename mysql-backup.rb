@@ -116,7 +116,7 @@ class App
 	def create_backup
 		password = ''
 		password = "-p#{@config.password}" if @config.password?
-		options = '--no-create-info --skip-comments'
+		options = '--skip-comments'
 		tables = @config.tables.join ' '
 		run! "mysqldump -u #{@config.username} #{password} --host=#{@config.server} #{options} #{@config.database} #{tables} | gzip > #{tmp_path}; exit ${PIPESTATUS[0]}"
 	end
