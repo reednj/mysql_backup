@@ -6,11 +6,17 @@ require 'trollop'
 class App
 	def main
 		opts = Trollop::options do
-			version "delete-old (c) 2016 @reednj"
+			version "delete old files (c) 2016 @reednj"
 			opt :wildcard, "wildcard for filename matching", :type => :string, :default => '*.gz'
 			opt :path, "path to search", :type => :string
-			opt :age, "match any files older than this (ex. 1d, 36h)", :default => '28d'
+			opt :age, "match any files older than this (ex. 1d, 36h)", :type => :string
 			opt :test, "print the list of matched files, but don't delete"
+		end
+
+		if opts[:age].nil?
+			# the only thing we really need specified is the age. We can use
+			# defaults for everything else
+			Trollop::educate
 		end
 
 		ext = opts[:wildcard] || '*.gz'
