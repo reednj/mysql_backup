@@ -4,7 +4,7 @@ require 'fileutils'
 
 class App
 	def main
-		files = ['add-ssh.sh', 'mysql-backup.rb']
+		files = ['add-ssh.sh', 'mysql-backup.rb', 'delete-old.rb']
 
 		self.add_bin_dir
 
