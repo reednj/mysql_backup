@@ -28,14 +28,18 @@ class App
 		path = File.expand_path(file, '.').fix_win_path
 		bin_path = File.expand_path('~/bin').fix_win_path
 		bin_name = File.basename file, File.extname(file)
-		FileUtils.ln_s path, File.join(bin_path, bin_name)
+		link_path = File.join(bin_path, bin_name)
+
+		if File.exist? link_path
+			puts "#{link_path} exists"
+		else
+			FileUtils.ln_s path, link_path
+		end
 	end
 
 	def make_exec(file)
 		`chmod 750 #{file}`
 	end
-
-
 end
 
 class String
