@@ -9,8 +9,6 @@ require 'mysql_backup/extensions'
 module MysqlBackup
 	class BackupConfig
 		def initialize(config)
-			try_load ['app.config.rb', './config/app.config.rb', '../config/app.config.rb']
-
 			@config = config
 			_validate!
 		end
