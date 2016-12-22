@@ -4,7 +4,7 @@ require 'json'
 require 'yaml'
 require 'time'
 
-require './shared/extensions.rb'
+require 'mysql_backup/extensions'
 
 module MysqlBackup
 	class BackupConfig
