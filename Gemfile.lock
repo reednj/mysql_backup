@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mysql_backup (0.6.0)
+    mysql_backup (1.1.0)
       colorize
       trollop
 
