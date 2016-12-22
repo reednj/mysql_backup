@@ -34,7 +34,7 @@ There are a number of optional parameters as well:
     tables: [action_log_notes, payment_log, payment_log_notes]
 
     # list multiple locations to save the backup to. SSH hosts can
-    # be list here as well, and the file will be transferred using
+    # be listed here as well, and the file will be transferred using
     # scp
     save_to:
     - ~/backups
