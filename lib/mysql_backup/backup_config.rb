@@ -55,6 +55,7 @@ module MysqlBackup
 		end
 
 		def save_to
+			return ['.'] if @config['save_to'].nil?
 			Array.from @config['save_to']
 		end
 
