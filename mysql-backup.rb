@@ -1,14 +1,5 @@
 #!/usr/bin/env ruby
 
-def this_dir
-	file = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
-	File.expand_path File.dirname(file)
-end
-
-def load_relative(path)
-	load File.expand_path path, this_dir()
-end
-
 require 'rubygems'
 require 'ostruct'
 require 'fileutils'
@@ -16,8 +7,7 @@ require 'json'
 require 'yaml'
 require 'time'
 require 'trollop'
-
-load_relative './shared/extensions.rb'
+require_relative './shared/extensions.rb'
 
 class BackupConfig
 	def initialize(config)
@@ -25,7 +15,6 @@ class BackupConfig
 
 		@config = config
 		_validate!
-
 	end
 
 	def self.load_from(path)
