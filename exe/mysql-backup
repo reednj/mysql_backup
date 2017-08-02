@@ -1,3 +1,8 @@
 #!/usr/bin/env ruby
 require 'mysql_backup'
-MysqlBackup::App.new.main
+
+begin
+    MysqlBackup::App.new.main
+rescue => e
+    puts e.to_s
+end
