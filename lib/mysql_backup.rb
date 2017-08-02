@@ -43,7 +43,7 @@ module MysqlBackup
       password = "-p#{@config.password}" if @config.password?
       options = '--skip-comments'
       tables = @config.tables.join ' '
-      run! "mysqldump -u #{@config.username} #{password} --host=#{@config.server} #{options} #{@config.database} #{tables} | gzip > #{tmp_path}; exit ${PIPESTATUS[0]}"
+      run! "mysqldump -u #{@config.username} #{password} --host=#{@config.server} #{options} #{@config.database} #{tables} | gzip > #{tmp_path}"
     end
 
     def save(to_dir)
