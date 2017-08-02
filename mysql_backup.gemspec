@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'mysql_backup/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "mysql_backup"
+  spec.name          = "mysql_backups"
   spec.version       = MysqlBackup::VERSION
   spec.authors       = ["Nathan Reed"]
   spec.email         = ["reednj@gmail.com"]
