@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["reednj@gmail.com"]
 
   spec.summary       = %q{easily make mysql backups from the command line}
-  spec.homepage      = "https://github.com/reedn/mysql_backup"
+  spec.homepage      = "https://github.com/reednj/mysql_backup"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
