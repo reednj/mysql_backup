@@ -15,6 +15,8 @@ module MysqlBackup
       Dir.mkdir tmp_dir if !File.exist? tmp_dir
       @seed = (rand() * 10000).round.to_s
 
+      Trollop::educate unless opts[:config]
+
       begin
         config_path = opts[:config] || 'mysql-backup.conf'
         @config = BackupConfig.load_from config_path
